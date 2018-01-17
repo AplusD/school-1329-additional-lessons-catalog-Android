@@ -1,3 +1,8 @@
 <resources>
+    <string name="app_name_label">Кружки</string>
     <string name="app_name">Каталог кружков</string>
+    <string name="action_settings">Настройки</string>
+    <string name="menu_search">Поиск</string>
+    <string name="extraclass_name">Название кружка</string>
+    <string name="show_all_classes">Показать все кружки</string>
 </resources>
