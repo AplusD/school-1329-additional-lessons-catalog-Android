@@ -1,7 +1,5 @@
 package com.aplusd.school_1329_extra_classes_catalogue.model;
 
-import android.arch.persistence.room.Entity;
-
 import com.aplusd.school_1329_extra_classes_catalogue.viewmodels.Config;
 
 import org.json.JSONException;
@@ -14,7 +12,7 @@ import java.io.Serializable;
  * @date 08.01.2018
  */
 
-@Entity
+
 public class ExtraClass implements Serializable{
 
     private boolean isFree = false;

@@ -14,6 +14,8 @@ import com.aplusd.school_1329_extra_classes_catalogue.viewmodels.Config;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
@@ -21,11 +23,16 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
  * @date 20.12.2017
  */
 
+
 public class ExtraClassAdapter extends RecyclerView.Adapter<ExtraClassAdapter.ViewHolderExtraClass> {
 
     private ArrayList<ExtraClass> extraClasses = new ArrayList<ExtraClass>();
+
+
     private Context context = null;
 
+
+    @Inject
     public ExtraClassAdapter(Context context) {
         this.context = context;
     }

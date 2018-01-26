@@ -1,7 +1,6 @@
 package com.aplusd.school_1329_extra_classes_catalogue.extraclasseswork;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,16 +12,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.aplusd.school_1329_extra_classes_catalogue.R;
+import com.aplusd.school_1329_extra_classes_catalogue.dependencyinjection.ContextModule;
+import com.aplusd.school_1329_extra_classes_catalogue.dependencyinjection.DaggerMainActivityComponent;
+import com.aplusd.school_1329_extra_classes_catalogue.dependencyinjection.MainActivityComponent;
+import com.aplusd.school_1329_extra_classes_catalogue.dependencyinjection.MainActivityModule;
 import com.aplusd.school_1329_extra_classes_catalogue.model.ExtraClass;
 import com.aplusd.school_1329_extra_classes_catalogue.viewmodels.ViewModelExtraClasses;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private ExtraClassAdapter extraClassAdapter = null;
-    private ViewModelExtraClasses  viewModel = null;
+    @Inject
+    public ExtraClassAdapter extraClassAdapter = null;
+
+    @Inject
+    public ViewModelExtraClasses  viewModel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +42,19 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        viewModel = ViewModelProviders.of(this).get(ViewModelExtraClasses.class);
+        final MainActivityComponent daggerMainActivityComponent =
+                DaggerMainActivityComponent.builder()
+                        .contextModule(new ContextModule(getBaseContext(), this))
+                        .mainActivityModule(new MainActivityModule()).build();
 
-        viewModel.getExtraClasses(getApplicationContext()).observe(this, new Observer<ArrayList<ExtraClass>>() {
+
+        viewModel = daggerMainActivityComponent.getViewModelExtraClass();
+
+        viewModel.getExtraClasses(getBaseContext()).observe(this, new Observer<ArrayList<ExtraClass>>() {
             @Override
             public void onChanged(@Nullable ArrayList<ExtraClass> extraClasses) {
                 if(extraClassAdapter == null) {
-                    extraClassAdapter = new ExtraClassAdapter(getBaseContext());
+                     extraClassAdapter = daggerMainActivityComponent.getExtraClassAdapter();
                     recyclerView.setAdapter(extraClassAdapter);
                 }
                 extraClassAdapter.setCourses(extraClasses);
@@ -53,10 +67,8 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.menu_search).getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        ((SearchView) menu.findItem(R.id.menu_search).getActionView())
+                .setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -65,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if(newText.isEmpty())
-                    extraClassAdapter.setCourses(viewModel.getExtraClasses(getApplicationContext()).getValue());
+                    extraClassAdapter.setCourses(viewModel.getExtraClasses(getBaseContext()).getValue());
                 else
                     extraClassAdapter.setCourses(extraClassAdapter.searchClass(newText));
                 return true;
@@ -80,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.showAllClasses:
-                extraClassAdapter.setCourses(viewModel.getExtraClasses(getApplicationContext()).getValue());
+                extraClassAdapter.setCourses(viewModel.getExtraClasses(getBaseContext()).getValue());
                 break;
         }
 

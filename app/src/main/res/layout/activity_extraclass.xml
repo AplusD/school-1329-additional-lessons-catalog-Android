@@ -184,6 +184,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"/>
 
+            <TextView
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:text="@string/extra_class_is_free"
+                android:visibility="@{extraClass.free?View.VISIBLE:View.GONE}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </ScrollView>

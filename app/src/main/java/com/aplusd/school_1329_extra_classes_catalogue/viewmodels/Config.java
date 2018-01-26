@@ -36,6 +36,10 @@ public class Config {
     public static final String INTENT_EXTRACOURSE = "extracourse";
 
     public static final String TAG_REQ = "REQUEST TAG:";
+    public static final String TAG_VIEW_MODEL = "VIEWMODEL_TAG";
+
+
+    public static final String CACHE_DIR = "courseCache";
 
 
 }
